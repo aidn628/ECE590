@@ -2,7 +2,7 @@ from math import sin, cos, pi
 from pylx16a.lx16a import *
 import time
 
-LX16A.initialize("COM3")
+LX16A.initialize("/dev/ttyUSB0")
 
 #SERVO      HOME OFFSET
 #servo 1 is 90 -13.5
