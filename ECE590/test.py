@@ -5,7 +5,7 @@ import platform
 if(platform.system() == 'Windows'):
     LX16A.initialize("COM3")
 else:
-    LX16A.initialize("dev/ttyUSB0")
+    LX16A.initialize("/dev/ttyUSB0")
 
 #SERVO      HOME OFFSET
 #servo 1 is 90 -13.5
