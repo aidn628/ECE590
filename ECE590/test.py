@@ -49,7 +49,7 @@ S7_RLIM = 150
 
 S8_HOME = 117.5
 S8_OFFSET = 18
-S8_LLIM = 88
+S8_LLIM = 85
 S8_RLIM = 145
 
 SERVO_HOMES = [0, S1_HOME, S2_HOME, S3_HOME, S4_HOME, S5_HOME, S6_HOME, S7_HOME, S8_HOME]
@@ -123,7 +123,7 @@ def main():
         time.sleep(0.25)
 
         servos[5].move(20 + servos[5].get_physical_angle(), 1)
-        time.sleep(0.25)
+        time.sleep(0.1)
 
         #Move cycle 2
 
@@ -150,7 +150,7 @@ def main():
         time.sleep(0.25)
 
         servos[7].move(20 + servos[7].get_physical_angle(), 1)
-        time.sleep(0.25)
+        time.sleep(0.1)
     
 
 if __name__ == "__main__":
