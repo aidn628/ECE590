@@ -1,8 +1,11 @@
-from math import sin, cos, pi
 from pylx16a.lx16a import *
 import time
+import platform
 
-LX16A.initialize("/dev/ttyUSB0")
+if(platform.system() == 'Windows'):
+    LX16A.initialize("COM3")
+else:
+    LX16A.initialize("dev/ttyUSB0")
 
 #SERVO      HOME OFFSET
 #servo 1 is 90 -13.5
@@ -11,23 +14,48 @@ LX16A.initialize("/dev/ttyUSB0")
 
 S1_HOME = 90
 S1_OFFSET = -13.5
-S1_LLIM = 20
+S1_LLIM = 30
 S1_RLIM = 160
 
-S2_HOME = 145
+S2_HOME = 143
 S2_OFFSET = 0
-S2_LLIM = 115
-S2_RLIM = 170
+S2_LLIM = 110
+S2_RLIM = 173
+
+S3_HOME = 109
+S3_OFFSET = 0
+S3_LLIM = 45
+S3_RLIM = 170
+
+S4_HOME = 46.5
+S4_OFFSET = -30
+S4_LLIM = 21
+S4_RLIM = 78
 
 S5_HOME = 90
 S5_OFFSET = -6
-S5_LLIM = 0
-S5_RLIM = 180
+S5_LLIM = 25
+S5_RLIM = 150
 
 S6_HOME = 90
 S6_OFFSET = 18
 S6_LLIM = 60
-S6_RLIM = 116
+S6_RLIM = 123
+
+S7_HOME = 86.4
+S7_OFFSET = 0
+S7_LLIM = 25
+S7_RLIM = 150
+
+S8_HOME = 117.5
+S8_OFFSET = 18
+S8_LLIM = 88
+S8_RLIM = 145
+
+SERVO_HOMES = [0, S1_HOME, S2_HOME, S3_HOME, S4_HOME, S5_HOME, S6_HOME, S7_HOME, S8_HOME]
+SERVO_OFFSETS = [0, S1_OFFSET, S2_OFFSET, S3_OFFSET, S4_OFFSET, S5_OFFSET, S6_OFFSET, S7_OFFSET, S8_OFFSET]
+SERVO_LOWER_LIMITS = [0, S1_LLIM, S2_LLIM, S3_LLIM, S4_LLIM, S5_LLIM, S6_LLIM, S7_LLIM, S8_LLIM]
+SERVO_UPPER_LIMITS = [0, S1_RLIM, S2_RLIM, S3_RLIM, S4_RLIM, S5_RLIM, S6_RLIM, S7_RLIM, S8_RLIM]
 
 def printAngle(servo1):
     try:
@@ -35,60 +63,95 @@ def printAngle(servo1):
     except (ServoTimeoutError, ServoChecksumError):
         pass
 
-
 def main():
+    servos = []
     try:
-        servo1 = LX16A(1)
-        servo1.set_angle_limits(S1_LLIM, S1_RLIM)
-        servo1.set_angle_offset(S1_OFFSET)
-
-        servo2 = LX16A(2)
-        servo2.set_angle_limits(S2_LLIM, S2_RLIM)
-        servo2.set_angle_offset(S2_OFFSET)
-        
-        servo5 = LX16A(5)
-        servo5.set_angle_limits(S5_LLIM, S5_RLIM)
-        servo5.set_angle_offset(S5_OFFSET)
-
-        servo6 = LX16A(6)
-        servo6.set_angle_limits(S6_LLIM, S6_RLIM)
-        servo6.set_angle_offset(S6_OFFSET)
-
+        for i in range(1, 9):
+            servos.append(LX16A(i))
+            servos[i-1].set_angle_limits(SERVO_LOWER_LIMITS[i], SERVO_UPPER_LIMITS[i])
+            servos[i-1].set_angle_offset(SERVO_OFFSETS[i])
     except ServoTimeoutError as e:
         print(f"Servo {e.id_} is not responding. Exiting...")
         quit()
 
-    servo1.enable_torque()
-    servo2.enable_torque()
-    servo5.enable_torque()
-    servo6.enable_torque()
+    for servo in servos:
+        servo.enable_torque()
 
     #Set all servos home
-    servo1.move(S1_HOME, 2)
-    servo2.move(S2_HOME, 2)
-    servo5.move(S5_HOME, 2)
-    servo6.move(S6_HOME, 2)
-    time.sleep(1)
+    for servo in servos:
+        servo.move(SERVO_HOMES[servo.get_id()], 3)
+    time.sleep(4)
 
-    servo1.move(S1_HOME, 1)
-    servo2.move(S2_HOME, 1)
-    servo5.move(S5_HOME, 2)
-    servo6.move(S6_HOME, 2)
-    time.sleep(1)
+    for servo in servos:
+        servo.move(SERVO_HOMES[servo.get_id()], 3)
+    time.sleep(4)
+
+    # servos[1].move(25 + servos[1].get_physical_angle(), 1)
+    # servos[3].move(25 + servos[3].get_physical_angle(), 1)
+    # servos[5].move(25 + servos[5].get_physical_angle(), 1)
+    # servos[7].move(25 + servos[7].get_physical_angle(), 1)
+
+    # time.sleep(2)
+
+    servos[2].move(-45 + servos[2].get_physical_angle(), 1)
+    servos[6].move(45 + servos[4].get_physical_angle(), 1)
+
+    time.sleep(1.25)
+
+    while(True):
+
+        servos[3].move(-20 + servos[3].get_physical_angle(), 1)
+        time.sleep(0.25)
+
+        servos[2].move(90 + servos[2].get_physical_angle(), 1)
+        time.sleep(0.25)
+
+        servos[3].move(20 + servos[3].get_physical_angle(), 1)
+        time.sleep(0.25)
+
+        servos[0].move(45+ servos[0].get_physical_angle(), 1)
+        servos[2].move(S3_HOME, 1)
+        servos[4].move(45+ servos[4].get_physical_angle(), 1)
+        servos[6].move(S7_HOME, 1)
+
+        time.sleep(0.25)
+
+        servos[5].move(-20 + servos[5].get_physical_angle(), 1)
+        time.sleep(0.25)
+
+        servos[4].move(-90 + servos[4].get_physical_angle(), 1)
+        time.sleep(0.25)
+
+        servos[5].move(20 + servos[5].get_physical_angle(), 1)
+        time.sleep(0.25)
+
+        #Move cycle 2
+
+        servos[1].move(-20 + servos[1].get_physical_angle(), 1)
+        time.sleep(0.25)
+
+        servos[0].move(-90 + servos[0].get_physical_angle(), 1)
+        time.sleep(0.25)
+
+        servos[1].move(20 + servos[1].get_physical_angle(), 1)
+        time.sleep(0.25)
+
+        servos[0].move(S1_HOME, 1)
+        servos[2].move(-45+ servos[2].get_physical_angle(), 1)
+        servos[4].move(S5_HOME, 1)
+        servos[6].move(-45 + servos[6].get_physical_angle(), 1)
+
+        time.sleep(0.25)
+
+        servos[7].move(-20 + servos[7].get_physical_angle(), 1)
+        time.sleep(0.25)
+
+        servos[6].move(90 + servos[6].get_physical_angle(), 1)
+        time.sleep(0.25)
+
+        servos[7].move(20 + servos[7].get_physical_angle(), 1)
+        time.sleep(0.25)
     
-    while True:
-        servo2.move(120, 1)
-        servo6.move(60, 1)
-        time.sleep(1)
-        servo1.move(150, 1)
-        servo5.move(150, 1)
-        time.sleep(1)
-        servo2.move(165,1)
-        servo6.move(115, 1)
-        time.sleep(1)
-        servo1.move(30, 1)
-        servo5.move(30, 1)
-        time.sleep(1)
 
 if __name__ == "__main__":
     main()
