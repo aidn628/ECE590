@@ -86,13 +86,6 @@ def main():
         servo.move(SERVO_HOMES[servo.get_id()], 3)
     time.sleep(4)
 
-    # servos[1].move(25 + servos[1].get_physical_angle(), 1)
-    # servos[3].move(25 + servos[3].get_physical_angle(), 1)
-    # servos[5].move(25 + servos[5].get_physical_angle(), 1)
-    # servos[7].move(25 + servos[7].get_physical_angle(), 1)
-
-    # time.sleep(2)
-
     servos[2].move(-45 + servos[2].get_physical_angle(), 1)
     servos[6].move(45 + servos[4].get_physical_angle(), 1)
 
