@@ -1,9 +1,12 @@
 from math import sin, cos, pi
 from pylx16a.lx16a import *
 import time
+import platform
 
-LX16A.initialize("COM3")
-
+if(platform.system() == 'Windows'):
+    LX16A.initialize("COM3")
+else:
+    LX16A.initialize("/dev/ttyUSB0")
 
 def printAngle(servo1):
     try:

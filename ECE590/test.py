@@ -119,7 +119,7 @@ def main():
         time.sleep(0.1)
 
         #Move cycle 2
-
+    
         servos[1].move(-20 + servos[1].get_physical_angle(), 1)
         time.sleep(0.25)
 
