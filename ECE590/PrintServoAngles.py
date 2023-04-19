@@ -8,9 +8,10 @@ if(platform.system() == 'Windows'):
 else:
     LX16A.initialize("/dev/ttyUSB0")
 
-def printAngle(servo1):
+def storeAngle(servo, servoAngles):
     try:
-        print(f"{servo1.get_physical_angle():0.2f}°")
+        a = servo.get_physical_angle()
+        servoAngles[servo.get_id()] = a
     except (ServoTimeoutError, ServoChecksumError):
         pass
 
@@ -26,13 +27,15 @@ def main():
 
     for servo in servos:
         servo.disable_torque()
+
+    servoAngles = [0, 0, 0, 0, 0, 0, 0, 0, 0]
     
     while True:
         for servo in servos:
             print(f"Servo {servo.get_id()}: ", end="")
-            printAngle(servo)
-        time.sleep(1)
-        print("\n\n")
+            storeAngle(servo, servoAngles)
+        time.sleep(0.25)
+        print(f"{servoAngles}\n\n")
 
 if __name__ == "__main__":
     main()
