@@ -77,7 +77,7 @@ def main():
         servo.move(SERVO_HOMES[servo.get_id()], 3)
     time.sleep(2)
 
-    with open('testfile.csv', newline='') as csvfile:
+    with open('boom.csv', newline='') as csvfile:
         data = list(csv.reader(csvfile))
 
     for row in data:

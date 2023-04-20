@@ -19,7 +19,7 @@ def storeAngle(servo, servoAngles):
 def main():
     servos = []
     try:
-        for i in range(1, 9):
+        for i in range(1, 8):
             servos.append(LX16A(i))
     except ServoTimeoutError as e:
         print(f"Servo {e.id_} is not responding. Exiting...")
@@ -28,16 +28,18 @@ def main():
     for servo in servos:
         servo.disable_torque()
 
-    f = open("testfile.csv", "w")
-
-    servoAngles = [0, 0, 0, 0, 0, 0, 0, 0, 0]
+    f = open("boom.csv", "w")
+    # print("hi")
+    servoAngles = [0, 0, 0, 0, 0, 0, 0, 0]
 
     while True:
+        print("hi")
         with Input(keynames='curses') as input_generator:
+            print("2")
             for e in input_generator:
-                #print(repr(e))
+                print(repr(e))
                 if e == ' ':
-                    fstr = f"{servoAngles[0]},{servoAngles[1]},{servoAngles[2]},{servoAngles[3]},{servoAngles[4]},{servoAngles[5]},{servoAngles[6]},{servoAngles[7]},{servoAngles[8]}\n"
+                    fstr = f"{servoAngles[0]},{servoAngles[1]},{servoAngles[2]},{servoAngles[3]},{servoAngles[4]},{servoAngles[5]},{servoAngles[6]},{servoAngles[7]}\n"
                     print(f"written {fstr} to file")
                     f.write(fstr)
                 else:
