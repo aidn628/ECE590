@@ -60,7 +60,7 @@ def main():
         for i in range(1, 8):
             servos.append(LX16A(i))
             servos[i-1].set_angle_limits(SERVO_LOWER_LIMITS[i], SERVO_UPPER_LIMITS[i])
-            servos[i-1].set_angle_offset(SERVO_OFFSETS[i])
+
     except ServoTimeoutError as e:
         print(f"Servo {e.id_} is not responding. Exiting...")
         quit()
