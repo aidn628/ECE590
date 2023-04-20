@@ -81,13 +81,13 @@ def main():
         data = list(csv.reader(csvfile))
 
     for row in data:
-        servos[0].move(float(row[1]), 50)
-        servos[1].move(float(row[2]), 50)
-        servos[2].move(float(row[3]), 50)
-        servos[3].move(float(row[4]), 50)
-        servos[4].move(float(row[5]), 50)
-        servos[5].move(float(row[6]), 50)
-        servos[6].move(float(row[7]), 50)
+        servos[0].move(float(row[1]), int(row[0]) - 50)
+        servos[1].move(float(row[2]), int(row[0]) - 50)
+        servos[2].move(float(row[3]), int(row[0]) - 50)
+        servos[3].move(float(row[4]), int(row[0]) - 50)
+        servos[4].move(float(row[5]), int(row[0]) - 50)
+        servos[5].move(float(row[6]), int(row[0]) - 50)
+        servos[6].move(float(row[7]), int(row[0]) - 50)
         
         time.sleep((int(row[0]))/1000)
 
